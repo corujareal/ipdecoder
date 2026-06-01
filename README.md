@@ -34,7 +34,8 @@ Antes de executar, certifique-se de ter instalado no sistema:
 Para instalar no **Debian/Ubuntu**:
 ```bash
 sudo apt update
-sudo apt install figlet hping3 wget dnsutils```
+sudo apt install figlet hping3 wget dnsutil
+```
 # Observações
 essa ferramenta é compatível apenas com linux
 # baixar código
@@ -43,3 +44,4 @@ git clone https://github.com/corujareal/ipdecoder
 cd ipdecoder
 chmod +x ipdecoder.sh
 ./ipdecoder.sh
+```
