@@ -44,5 +44,4 @@ git clone https://github.com/corujareal/ipdecoder
 cd ipdecoder
 chmod +x ipdecoder.sh
 ./ipdecoder.sh
-
-Observação: Esta ferramenta é compatível apenas com Linux.
+```
