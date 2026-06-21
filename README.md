@@ -10,15 +10,6 @@ A modular Bash script that bundles several network and system utilities into a s
 
 All of this with a styled banner and straightforward prompts. **Every pause is now a “Press Enter to continue” – you control the pace.**
 
-## What’s new (improvements)
-
-- **Security:** Input validation prevents command injection. Temporary files are created safely with `mktemp` and cleaned up even on interruption.
-- **Multi‑distro support:** Automatically detects your package manager (apt, pacman, dnf, yum, zypper, apk) and installs missing dependencies. Service restart works with systemd, SysVinit, and OpenRC.
-- **Automatic privilege handling:** Commands that require root (`hping3`, `ss -nlpt`, package installs, service restart) will request `sudo` if you are not running as root – no need to remember.
-- **No more blind waits:** All `sleep` commands were replaced by a “Press Enter to continue” prompt. The exit option also waits for confirmation.
-- **Robustness:** The script uses `set -euo pipefail` to stop on errors immediately. Flag injection is prevented with `--` in all external commands.
-- **Clean code:** Functions for repetitive tasks, consistent indentation, no emojis, plain English comments.
-
 ## Prerequisites
 
 The script **can automatically install** the required tools on many Linux distributions (see below). If you prefer to install them manually, here is what it needs:
