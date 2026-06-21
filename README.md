@@ -1,47 +1,70 @@
-#  IP Decoder
+# IP Decoder
 
-> Uma ferramenta versátil que vai além do nome: automação simples para diagnóstico de sistema, rede e servidores.
+A modular Bash script that bundles several network and system utilities into a single, colorful terminal menu. It is not just about IP addresses – it helps you:
 
-![Shell Script](https://img.shields.io/badge/shell-✓-green?style=flat&logo=gnu-bash)
-![Licença](https://img.shields.io/badge/licença-MIT-blue)
+- View system information (uptime, current directory, user).
+- Restart services and inspect running processes/open ports.
+- Discover live hosts on a local network (ICMP sweep).
+- Scan a specific port across a subnet.
+- Extract domain names from a web page and resolve their IP addresses.
 
-# O que é?
+All of this with a styled banner and straightforward prompts. **Every pause is now a “Press Enter to continue” – you control the pace.**
 
-O **IP Decoder** é um conjunto de pequenas rotinas agrupadas em um único script. Ele não serve apenas para lidar com IPs – na verdade, oferece funções úteis para:
+## What’s new (improvements)
 
-- Consultar informações do sistema e do usuário atual.
-- Reiniciar serviços e visualizar processos/portas abertas.
-- Descobrir hosts ativos em uma rede local (ping sweep).
-- Escanear portas específicas em uma faixa de IPs.
-- Extrair domínios de uma página web e resolver seus endereços IP.
+- **Security:** Input validation prevents command injection. Temporary files are created safely with `mktemp` and cleaned up even on interruption.
+- **Multi‑distro support:** Automatically detects your package manager (apt, pacman, dnf, yum, zypper, apk) and installs missing dependencies. Service restart works with systemd, SysVinit, and OpenRC.
+- **Automatic privilege handling:** Commands that require root (`hping3`, `ss -nlpt`, package installs, service restart) will request `sudo` if you are not running as root – no need to remember.
+- **No more blind waits:** All `sleep` commands were replaced by a “Press Enter to continue” prompt. The exit option also waits for confirmation.
+- **Robustness:** The script uses `set -euo pipefail` to stop on errors immediately. Flag injection is prevented with `--` in all external commands.
+- **Clean code:** Functions for repetitive tasks, consistent indentation, no emojis, plain English comments.
 
-Tudo isso com um menu colorido e feedback visual direto.
+## Prerequisites
 
-# Pré‑requisitos
+The script **can automatically install** the required tools on many Linux distributions (see below). If you prefer to install them manually, here is what it needs:
 
-Antes de executar, certifique-se de ter instalado no sistema:
+| Tool   | Why it is used                      |
+|--------|-------------------------------------|
+| bash   | Script interpreter                  |
+| figlet | Stylized banners                    |
+| ping   | Host discovery (ICMP)               |
+| hping3 | Port scanning                       |
+| ss     | Listing open ports                  |
+| wget   | Downloading HTML for parsing        |
+| host   | Resolving domains to IP             |
+| grep, awk, cut, ps, rm | Text processing and system commands |
 
-| Programa | Por quê? |
-|----------|----------|
-| `bash`  | Interpretador do script. |
-| `figlet` | Gera o banner estilizado nos menus. |
-| `ping`  | Usado na opção de varredura de rede (ICMP). |
-| `hping3` | Necessário para o **port scan** (opção 4). |
-| `netstat` | Lista portas abertas (opção 2). |
-| `wget`   | Baixa o HTML para o parsing (opção 5). |
-| `host`   | Resolve domínios para IP (opção 5). |
+Manual install examples (if you skip auto‑install):
 
-Para instalar no **Debian/Ubuntu**:
 ```bash
-sudo apt update
-sudo apt install figlet hping3 wget dnsutil
+# Debian/Ubuntu
+sudo apt update && sudo apt install figlet hping3 wget dnsutils iproute2 procps grep iputils-ping gawk coreutils
+
+# Fedora
+sudo dnf install figlet hping3 wget bind-utils iproute initscripts procps-ng grep iputils gawk coreutils
+
+# Arch
+sudo pacman -S figlet hping3 wget bind-tools iproute2 systemd-sysvcompat procps-ng grep iputils gawk coreutils
 ```
-# Observações
-essa ferramenta é compatível apenas com linux
-# baixar código
+
+## Installation and usage
+
 ```bash
 git clone https://github.com/corujareal/ipdecoder
 cd ipdecoder
 chmod +x ipdecoder.sh
 ./ipdecoder.sh
 ```
+
+When you run it for the first time, the script checks for missing dependencies and offers to install everything with a single confirmation – no need to leave the script.
+
+Navigate the menu by typing a number (1‑5, or 0 to exit). After each operation, press **Enter** to return to the menu.
+
+## Notes
+
+- **Root privileges:** The script will ask for `sudo` only when a command actually needs it (e.g., port scanning, listing process names on ports, or installing packages). You can also run the whole script as root if you prefer.
+- **Compatibility:** Tested on Debian, Ubuntu, Fedora, CentOS, Arch, openSUSE, and Alpine. If your distribution is not detected, you can still install the required tools manually.
+- **Security:** All user inputs are validated. The script never passes raw input to dangerous commands without sanitisation.
+- **File handling:** Temporary files are created in `/tmp` securely and are removed automatically, even if you press Ctrl+C.
+
+Feel free to open an issue or pull request if you find a bug or want to suggest an improvement.
